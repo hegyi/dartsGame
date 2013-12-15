@@ -102,9 +102,6 @@ dartsGame.controller('ParticipantsController', ['$scope', '$rootScope', 'Game', 
   $rootScope.dartsGame = Game.build();
   var dartsGame = $rootScope.dartsGame;
 
-  Game.addParticipant(dartsGame, "fos");
-  Game.addParticipant(dartsGame, "hugy");
-
   $scope.addParticipant = function(newParticipant) {
     Game.addParticipant(dartsGame, newParticipant);
     $scope.newParticipant = "";
