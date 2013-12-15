@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>HTML5 Demo</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/darts_game.js"></script>
+  </head>
+  <body ng-app="dartsGame">
+    <div class="container">
+      <div ng-controller="ParticipantsController" ng-show="dartsGame.isRunning == false">
+        <div class="row">
+          <div class="span12">
+            <h1>{{title}} - New game</h1>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span12">
+            <h3>Players</h3>
+            <ul>
+              <li ng-repeat="participant in dartsGame.participants">{{participant}}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span12">
+            <h3>Add new player</h3>
+            <form class="form-inline">
+              <div class="form-group">
+                <input class="form-control" type="text" ng-model="newParticipant" />
+              </div>
+              <div class="form-group">
+                <button class="btn" ng-click="addParticipant(newParticipant)">Add</button>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-info" ng-click="startGame()">start</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+      </div>
+
+
+      <div ng-controller="GameController" ng-show="dartsGame.isRunning == true">
+        <div class="row">
+          <div class="span12">
+            <h2>Current player: {{dartsGame.currentParticipant}}</h2>
+            <table class="table table-striped table-bordered">
+              <thead>
+                <th></th>
+                <th ng-repeat="participant in dartsGame.participants">{{participant}}</th>
+              </thead>
+              <tbody>
+                <tr ng-repeat="round in dartsGame.rounds">
+                  <td>round #{{$index + 1}}</td>
+                  <td ng-dblclick="editScore($parent.$index, participant)" ng-repeat="(participant, participantScore) in round">
+                    {{participantScore.total}} ({{formatScore(participantScore.scores)}})
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span12">
+            <div class="well" ng-show="dartsGame.isOver == false">
+              <form class="form-inline" name="addScoreForm">
+                <div class="form-group col-xs-2">
+                  <input class="form-control small" type="number" ng-model="currentScore" required>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-info" ng-disabled="addScoreForm.$invalid" ng-click="addScore(currentScore)">Add score</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="well" ng-show="dartsGame.isOver">
+            <h1>Winner: {{dartsGame.winner}}</h1>
+            <button class="btn btn-success" ng-click="startNewGame()">New game</button>
+          </div>
+          <div class="row">
+            <div class="span12">
+              <table class="table table-bordered table-striped">
+                <tbody>
+                  <tr ng-repeat="(participant, score) in dartsGame.currentTotalScore">
+                    <td>{{participant}}</td>
+                    <td>501 / <b>{{501 - score}}</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row" ng-show="showEditScoreField == true">
+            <div class="span12">
+              <h2>Edit score</h2>
+              <form novalidate class="form-inline" name="editScoreForm">
+                <div class="form-group col-xs-2" ng-repeat="score in editScoreValues.scores">
+                  <input class="form-control small" type="number" ng-model="score.value" required>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-danger" ng-disabled="addScoreForm.$invalid" ng-click="saveScore()">Save</button>
+                  <button class="btn" ng-click="cancelEditScore()">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </body>
+  </html>
