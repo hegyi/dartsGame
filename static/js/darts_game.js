@@ -109,6 +109,7 @@ dartsGame.controller('ParticipantsController', ['$scope', '$rootScope', 'Game', 
 
   $scope.startGame = function() {
     Game.setStarted(dartsGame);
+    Game.init(dartsGame);
   }
 
 }]);
@@ -118,7 +119,6 @@ dartsGame.controller('GameController', ['$scope', '$rootScope', 'Game', function
   $scope.showEditScoreField = false;
   $scope.editScore = {}
   var dartsGame = $rootScope.dartsGame;
-  Game.init(dartsGame);
 
   $scope.formatScore = function(scores) {
     return scores.join(", ");
